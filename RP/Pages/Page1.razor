@@ -1,0 +1,43 @@
+﻿@page "/Page1"
+
+<h1>This is an interactive webpage!</h1>
+Click PC Name and this webpage will display the current time, updated each second!
+This is a developer preview page to demonstrate the capabilities of this web app.
+
+<p>OS Version: @OSinfo</p>
+<p>PC Name: @PCname</p>
+<!--  <button class="btn btn-primary" @onclick="IncrementCount">Click me2</button> -->
+<button class="btn btn-primary" @onclick="GetTime">OS Version</button>
+<button class="btn btn-primary" @onclick="GetPCName">PC Name</button>
+
+@code {
+    private string OSinfo;
+    static private string PCname;
+    System.Timers.Timer aTimer = new System.Timers.Timer(1000);
+
+    private void GetTime()
+    {
+        string OSver = Environment.OSVersion.VersionString.ToString();
+        OSinfo = OSver;
+
+    }
+    private void GetPCName()
+    {
+        aTimer = new System.Timers.Timer(1000);
+        aTimer.Elapsed += CountDownTimer;
+        aTimer.Enabled = true;
+        
+      string name = Environment.MachineName;
+        string time = DateTime.Now.ToString();
+        PCname = name + " at " + time;
+   }
+   public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        string name = Environment.MachineName;
+        string time = DateTime.Now.ToString();
+        PCname = name + " at " + time;
+        InvokeAsync(StateHasChanged);
+    }
+
+
+}
